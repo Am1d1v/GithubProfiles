@@ -6,11 +6,12 @@ const search = document.querySelector('#search');
 const main = document.querySelector('#main');
 
 
-// Fetch a user data
+// Fetch the user data
 async function getUser(username){
     try {
         const {data} = await axios(APIURL + username);
         createUserCard(data)
+        getRepos(username)
     } catch (error) {
         if(error.response.status = 404){
           createErrorCard('No profile with this username');
@@ -18,7 +19,33 @@ async function getUser(username){
         
     }
 }
-//getUser('Am1d1v');
+
+// Fetch the user's repos
+async function getRepos(username){
+    try {
+        const {data} = await axios(APIURL + username + '/repos?sort=created');
+        addReposToCard(data);
+    } catch (error) {
+        createErrorCard('Problem fetching repos');
+    }
+}
+
+// Card of user's repos
+function addReposToCard(repos){
+    const reposElement = document.querySelector('#repos')
+
+    repos
+    .slice(0, 9)
+    .forEach((repo) => {
+        const repoLink = document.createElement('a');
+        repoLink.classList.add('repo')
+        repoLink.href = repo.html_url;
+        repoLink.target = '_blank';
+        repoLink.innerHTML = repo.name;
+
+        reposElement.append(repoLink);
+    })
+}
 
 // Serch define user
 form.addEventListener('submit', (event) => {
@@ -71,3 +98,5 @@ function createErrorCard(message){
     `
     main.innerHTML = cardHTML;
 }
+
+

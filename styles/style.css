@@ -70,6 +70,10 @@ body {
   display: inline-block;
 }
 
+.repo {
+  margin: 5px;
+}
+
 .card {
   max-width: 800px;
   background-color: #4c2885;
